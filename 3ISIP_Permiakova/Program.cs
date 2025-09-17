@@ -63,7 +63,8 @@ class Programm
             Console.WriteLine("5. Поиск товаров по коду");
             Console.WriteLine("6. Поиск товаров по названию");
             Console.WriteLine("7. Поиск товаров по категории");
-            Console.WriteLine("8. Выход");
+            Console.WriteLine("8. Вывод всех товаров");
+            Console.WriteLine("9. Выход");
             Console.Write("Ваш выбор: ");
             string choice = Console.ReadLine();
 
@@ -91,6 +92,9 @@ class Programm
                     SearchTovarByCategory();
                     break;
                 case "8":
+                    ShowAllProducts();
+                    break;
+                case "9":
                     Console.WriteLine("До свидания!");
                     return;
                 default:
@@ -116,38 +120,156 @@ class Programm
         }
     }
 
-     static void AddTovar()
+    static void AddTovar()
     {
+        Console.WriteLine("\n--- Добавление товара ---");
+        Console.Write("Название товара: ");
+        string name = Console.ReadLine();
 
+        Console.Write("Цена товара: ");
+        if (!decimal.TryParse(Console.ReadLine(), out decimal price))
+        {
+            Console.WriteLine("Ошибка: цена должна быть числом");
+            return;
+        }
+
+        Console.Write("Количество: ");
+        if (!int.TryParse(Console.ReadLine(), out int quantity))
+        {
+            Console.WriteLine("Ошибка: количество должно быть числом");
+            return;
+        }
+
+        Console.WriteLine("Категории:");
+        foreach (var cat in Enum.GetValues(typeof(ProductCategory)))
+        {
+            Console.WriteLine($"{(int)cat} - {cat}");
+        }
+        Console.Write("Выберите категорию: ");
+        if (!int.TryParse(Console.ReadLine(), out int catNum) || !Enum.IsDefined(typeof(ProductCategory), catNum))
+        {
+            Console.WriteLine("Ошибка: неверная категория");
+            return;
+        }
+
+        products.Add(new Product(name, price, quantity, (ProductCategory)catNum));
+        Console.WriteLine("Товар успешно добавлен!");
     }
+
 
     static void RemoveTovar()
     {
+        Console.Write("\nВведите код товара для удаления: ");
+        if (!int.TryParse(Console.ReadLine(), out int id))
+        {
+            Console.WriteLine("Ошибка: код должен быть числом");
+            return;
+        }
+
+        var product = products.FirstOrDefault(p => p.Id == id);
+        if (product != null)
+        {
+            products.Remove(product);
+            Console.WriteLine("Товар удален.");
+        }
+        else
+        {
+            Console.WriteLine("Товар не найден.");
+        }
 
     }
 
     static void PostavkaTovara()
     {
+        Console.Write("\nВведите код товара для поставки: ");
+        if (!int.TryParse(Console.ReadLine(), out int id)) return;
 
+        var product = products.FirstOrDefault(p => p.Id == id);
+        if (product == null)
+        {
+            Console.WriteLine("Товар не найден.");
+            return;
+        }
+
+        Console.Write("Введите количество для поставки: ");
+        if (!int.TryParse(Console.ReadLine(), out int amount)) return;
+
+        product.UpdateQuantity(amount);
+        Console.WriteLine("Поставка выполнена.");
     }
 
     static void SellTovar()
     {
+        Console.Write("\nВведите код товара для продажи: ");
+        if (!int.TryParse(Console.ReadLine(), out int id)) return;
 
+        var product = products.FirstOrDefault(p => p.Id == id);
+        if (product == null)
+        {
+            Console.WriteLine("Товар не найден.");
+            return;
+        }
     }
 
-    static void SearchTovarByCode()
-    {
+        static void SearchTovarByCode()
+        {
+            Console.Write("\nВведите код товара: ");
+            if (!int.TryParse(Console.ReadLine(), out int id)) return;
 
+            var product = products.FirstOrDefault(p => p.Id == id);
+            Console.WriteLine(product != null ? product.ToString() : "Товар не найден.");
+        }
+
+        static void SearchTovarByName()
+        {
+            Console.Write("\nВведите название товара: ");
+            string name = Console.ReadLine()?.ToLower();
+
+            var found = products.Where(p => p.Name.ToLower().Contains(name)).ToList();
+            if (found.Any())
+                found.ForEach(p => Console.WriteLine(p));
+            else
+                Console.WriteLine("Товары не найдены.");
+        }
+
+        static void SearchTovarByCategory()
+        {
+            Console.WriteLine("\nКатегории:");
+            foreach (var cat in Enum.GetValues(typeof(ProductCategory)))
+            {
+                Console.WriteLine($"{(int)cat} - {cat}");
+            }
+
+            Console.Write("Введите номер категории: ");
+            if (!int.TryParse(Console.ReadLine(), out int catNum) || !Enum.IsDefined(typeof(ProductCategory), catNum))
+            {
+                Console.WriteLine("Ошибка: неверная категория");
+                return;
+            }
+
+            var found = products.Where(p => p.Category == (ProductCategory)catNum).ToList();
+            if (found.Any())
+                found.ForEach(p => Console.WriteLine(p));
+            else
+                Console.WriteLine("Товары не найдены.");
+        }
+
+        static void ShowAllProducts()
+        {
+            Console.WriteLine("\n--- Все товары в магазине ---");
+
+            if (products.Any())
+            {
+                Console.WriteLine($"Всего товаров: {products.Count}");
+                foreach (var product in products.OrderBy(p => p.Id))
+                {
+                    Console.WriteLine(product);
+                }
+            }
+            else
+            {
+                Console.WriteLine("В магазине нет товаров.");
+            }
+        }
     }
 
-    static void SearchTovarByName()
-    {
-
-    }
-
-    static void SearchTovarByCategory()
-    {
-
-    }
-}
