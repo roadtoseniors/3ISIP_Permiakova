@@ -204,10 +204,26 @@ class Programm
         if (!int.TryParse(Console.ReadLine(), out int id)) return;
 
         var product = products.FirstOrDefault(p => p.Id == id);
+
         if (product == null)
         {
             Console.WriteLine("Товар не найден.");
             return;
+        }
+        Console.Write("Введите количество для продажи: ");
+        if (!int.TryParse(Console.ReadLine(), out int amount) || amount <= 0)
+        {
+            Console.WriteLine("Ошибка: количество должно быть положительным числом");
+            return;
+        }
+        try
+        {
+            product.UpdateQuantity(-amount);
+            Console.WriteLine($"Продажа успешна. Остаток товара: {product.Quantity}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка: {ex.Message}");
         }
     }
 
