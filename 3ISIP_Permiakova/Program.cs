@@ -1,9 +1,9 @@
 ﻿public enum ProductCategory
 {
     Electronics = 1,
-    Clothing = 2,      
-    Food = 3,          
-    Books = 4,        
+    Clothing = 2,
+    Food = 3,
+    Books = 4,
     Sports = 5
 }
 
@@ -16,6 +16,7 @@ public class Product
     public int Quantity { get; private set; }
     public bool InStock => Quantity > 0;
     public ProductCategory Category { get; private set; }
+
 
     public Product(string name, decimal price, int quantity, ProductCategory category)
     {
@@ -32,7 +33,7 @@ public class Product
 
     public void UpdateQuantity(int amount)
     {
-        if(Quantity+amount < 0)
+        if (Quantity + amount < 0)
             throw new ArgumentOutOfRangeException("недостаток товара на складе");
         Quantity += amount;
     }
@@ -43,11 +44,32 @@ public class Product
                $"Количество: {Quantity}, В наличии: {(InStock ? "Да" : "Нет")}, " +
                $"Категория: {Category}";
     }
-}
 
+}
+//класс хранения информации специально для вовы это писал я 
+public class SaleRecord
+{
+    public int ProductId { get; }
+    public string ProductName { get; set; }
+    public int Quantity { get; set; }
+    public decimal TotalPrice { get; set; }
+    public SaleRecord(int productId, string productName, int quantity, decimal totalPrice)
+    {
+        ProductId = productId;
+        ProductName = productName;
+        Quantity = quantity;
+        TotalPrice = totalPrice;
+    }
+    public string GetInfo()
+    {
+        return $"{ProductName} (код {ProductId}) - {Quantity} шт. на сумму {TotalPrice:C}";
+    }
+}
 class Programm
 {
     private static List<Product> products = new List<Product>();
+    private static Stack<SaleRecord> salesHistory = new Stack<SaleRecord>(); // тут храним историю
+    private static Stack<SaleRecord> undoSale = new Stack<SaleRecord>(); // тут для отмены 
     static void Main(string[] args)
     {
         AddTestData();
@@ -92,7 +114,7 @@ class Programm
                     break;
                 case "7":
                     SearchTovarByCategory();
-                    break;  
+                    break;
                 case "8":
                     ShowAllProducts();
                     break;
@@ -227,6 +249,11 @@ class Programm
         try
         {
             product.UpdateQuantity(-amount);
+            //Тут короче записываем в стек при продаже это для истории
+            decimal total = amount * product.Price;
+            var record = new SaleRecord(product.Id, product.Name, amount, total);
+            salesHistory.Push(record);
+            undoSale.Push(record);
             Console.WriteLine($"Продажа успешна. Остаток товара: {product.Quantity}");
         }
         catch (Exception ex)
@@ -235,75 +262,136 @@ class Programm
         }
     }
 
-        static void SearchTovarByCode()
-        {
-            Console.Write("\nВведите код товара: ");
-            if (!int.TryParse(Console.ReadLine(), out int id)) return;
+    static void SearchTovarByCode()
+    {
+        Console.Write("\nВведите код товара: ");
+        if (!int.TryParse(Console.ReadLine(), out int id)) return;
 
-            var product = products.FirstOrDefault(p => p.Id == id);
-            Console.WriteLine(product != null ? product.Print() : "Товар не найден.");
+        var product = products.FirstOrDefault(p => p.Id == id);
+        Console.WriteLine(product != null ? product.Print() : "Товар не найден.");
+    }
+
+    static void SearchTovarByName()
+    {
+        Console.Write("\nВведите название товара: ");
+        string name = Console.ReadLine()?.ToLower();
+
+        var found = products.Where(p => p.Name.ToLower().Contains(name)).ToList();
+        if (found.Any())
+            found.ForEach(p => Console.WriteLine(p));
+        else
+            Console.WriteLine("Товары не найдены.");
+    }
+
+    static void SearchTovarByCategory()
+    {
+        Console.WriteLine("\nКатегории:");
+        foreach (var cat in Enum.GetValues(typeof(ProductCategory)))
+        {
+            Console.WriteLine($"{(int)cat} - {cat}");
         }
 
-        static void SearchTovarByName()
+        Console.Write("Введите номер категории: ");
+        if (!int.TryParse(Console.ReadLine(), out int catNum) || !Enum.IsDefined(typeof(ProductCategory), catNum))
         {
-            Console.Write("\nВведите название товара: ");
-            string name = Console.ReadLine()?.ToLower();
-
-            var found = products.Where(p => p.Name.ToLower().Contains(name)).ToList();
-            if (found.Any())
-                found.ForEach(p => Console.WriteLine(p));
-            else
-                Console.WriteLine("Товары не найдены.");
+            Console.WriteLine("Ошибка: неверная категория");
+            return;
         }
 
-        static void SearchTovarByCategory()
+        var found = products.Where(p => p.Category == (ProductCategory)catNum).ToList();
+        if (found.Any())
+            found.ForEach(p => Console.WriteLine(p));
+        else
+            Console.WriteLine("Товары не найдены.");
+    }
+
+    static void ShowAllProducts()
+    {
+        Console.WriteLine("\n--- Все товары в магазине ---");
+
+        if (products.Any())
         {
-            Console.WriteLine("\nКатегории:");
-            foreach (var cat in Enum.GetValues(typeof(ProductCategory)))
+            Console.WriteLine($"Всего товаров: {products.Count}");
+            foreach (var product in products.OrderBy(p => p.Id))
             {
-                Console.WriteLine($"{(int)cat} - {cat}");
+                Console.WriteLine(product.Print());
             }
+        }
+        else
+        {
+            Console.WriteLine("В магазине нет товаров.");
+        }
+    }
 
-            Console.Write("Введите номер категории: ");
-            if (!int.TryParse(Console.ReadLine(), out int catNum) || !Enum.IsDefined(typeof(ProductCategory), catNum))
+
+    //ну тут просто обращаемся к вышенаписанному
+    static void HistorySellProduct()
+    {
+        Console.WriteLine("\n--- История продаж ---");
+
+        if (!salesHistory.Any())
+        {
+            Console.WriteLine("Продаж пока не было.");
+            return;
+        }
+
+        foreach (var sale in salesHistory)
+        {
+            Console.WriteLine(sale.GetInfo());
+        }
+        Console.WriteLine("\nХотите отменить последнюю продажу? (д/н): ");
+        string choice = Console.ReadLine();
+        if (choice?.ToLower() == "д")
+        {
+            if (!undoSale.Any())
             {
-                Console.WriteLine("Ошибка: неверная категория");
+                Console.WriteLine("Нет продаж для отмены.");
                 return;
             }
 
-            var found = products.Where(p => p.Category == (ProductCategory)catNum).ToList();
-            if (found.Any())
-                found.ForEach(p => Console.WriteLine(p));
-            else
-                Console.WriteLine("Товары не найдены.");
-        }
-
-        static void ShowAllProducts()
-        {
-            Console.WriteLine("\n--- Все товары в магазине ---");
-
-            if (products.Any())
+            var lastSale = undoSale.Pop();
+            var product = products.FirstOrDefault(p => p.Id == lastSale.ProductId);
+            if (product != null)
             {
-                Console.WriteLine($"Всего товаров: {products.Count}");
-                foreach (var product in products.OrderBy(p => p.Id))
-                {
-                    Console.WriteLine(product);
-                }
-            }
-            else
-            {
-                Console.WriteLine("В магазине нет товаров.");
+                product.UpdateQuantity(lastSale.Quantity);  //возвращаем товар 
+                salesHistory = new Stack<SaleRecord>(salesHistory.Where(s => s != lastSale).Reverse());
+                Console.WriteLine("Последняя продажа отменена!");
             }
         }
-
-    static void HistorySellProduct()
-    {
-
     }
-
+    //ну тут именно очко перебираем по товарам и выводим 
     static void ReportProduct()
     {
+        Console.WriteLine("\n--- Отчёт о продажах ---");
 
+        if (!salesHistory.Any())
+        {
+            Console.WriteLine("Продаж пока не было.");
+            return;
+        }
+
+        //общие показатели
+        int totalItems = salesHistory.Sum(s => s.Quantity);
+        decimal totalRevenue = salesHistory.Sum(s => s.TotalPrice);
+
+        Console.WriteLine($"Всего продано товаров: {totalItems}");
+        Console.WriteLine($"Общая выручка: {totalRevenue:C}");
+
+        //продажи по каждому товару
+        var grouped = salesHistory
+            .GroupBy(s => s.ProductName)
+            .Select(g => new
+            {
+                Name = g.Key,
+                Count = g.Sum(s => s.Quantity),
+                Sum = g.Sum(s => s.TotalPrice)
+            });
+
+        Console.WriteLine("\nПродажи по товарам:");
+        foreach (var item in grouped)
+        {
+            Console.WriteLine($"{item.Name}: {item.Count} шт. на сумму {item.Sum:C}");
+        }
     }
 
 }
