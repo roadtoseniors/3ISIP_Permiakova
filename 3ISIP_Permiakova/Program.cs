@@ -64,7 +64,9 @@ class Programm
             Console.WriteLine("6. Поиск товаров по названию");
             Console.WriteLine("7. Поиск товаров по категории");
             Console.WriteLine("8. Вывод всех товаров");
-            Console.WriteLine("9. Выход");
+            Console.WriteLine("9. История продаж с возможностью отмены последней продажи.");
+            Console.WriteLine("10. Отчёт о продажах.");
+            Console.WriteLine("11. Выход");
             Console.Write("Ваш выбор: ");
             string choice = Console.ReadLine();
 
@@ -90,11 +92,17 @@ class Programm
                     break;
                 case "7":
                     SearchTovarByCategory();
-                    break;
+                    break;  
                 case "8":
                     ShowAllProducts();
                     break;
                 case "9":
+                    HistorySellProduct();
+                    break;
+                case "10":
+                    ReportProduct();
+                    break;
+                case "11":
                     Console.WriteLine("До свидания!");
                     return;
                 default:
@@ -287,4 +295,15 @@ class Programm
                 Console.WriteLine("В магазине нет товаров.");
             }
         }
+
+    static void HistorySellProduct()
+    {
+
     }
+
+    static void ReportProduct()
+    {
+
+    }
+
+}
