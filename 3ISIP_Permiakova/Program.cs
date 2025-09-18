@@ -37,7 +37,7 @@ public class Product
         Quantity += amount;
     }
 
-    public override string ToString()
+    public string Print()
     {
         return $"Код: {Id}, Название: {Name}, Цена: {Price:C}, " +
                $"Количество: {Quantity}, В наличии: {(InStock ? "Да" : "Нет")}, " +
@@ -233,7 +233,7 @@ class Programm
             if (!int.TryParse(Console.ReadLine(), out int id)) return;
 
             var product = products.FirstOrDefault(p => p.Id == id);
-            Console.WriteLine(product != null ? product.ToString() : "Товар не найден.");
+            Console.WriteLine(product != null ? product.Print() : "Товар не найден.");
         }
 
         static void SearchTovarByName()
@@ -288,4 +288,3 @@ class Programm
             }
         }
     }
-
