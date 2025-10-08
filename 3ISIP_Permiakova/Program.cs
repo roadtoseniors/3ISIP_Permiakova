@@ -158,22 +158,74 @@
 
     static void SearchNameBook() 
     {
-        
+        Console.Write("Введите название книги: ");
+        string name = Console.ReadLine().ToLower();
+        var results = books.Where(b => b.Name.ToLower().Contains(name)).ToList();
+
+        if (results.Count == 0)
+        {
+            Console.WriteLine("Книги не найдены");
+        }
+        else
+        {
+            results.ForEach(b => Console.WriteLine(b.Print()));
+        }
     }
 
     static void SearchAutorBook()
     {
+        Console.Write("Введите автора книги: ");
+        string Autor = Console.ReadLine().ToLower();
+        var results = books.Where(b => b.Autor.ToLower().Contains(Autor)).ToList();
 
+        if (results.Count == 0)
+        {
+            Console.WriteLine("Книги не найдены");
+        }
+        else
+        {
+            results.ForEach(b => Console.WriteLine(b.Print()));
+        }
     }
 
     static void SearchJanreBook()
     {
+        Console.Write("Введите жанр книги: ");
+        if (books.Count == 0)
+        {
+            Console.WriteLine("Библиотека пуста.\n");
+            return;
+        }
 
+        Console.WriteLine("Выберите жанр:");
+        foreach (var genre in Enum.GetValues(typeof(BookJanre)))
+            Console.WriteLine($"{(int)genre} — {genre}");
+
+        Console.Write("\nВведите номер жанра: ");
+        if (!int.TryParse(Console.ReadLine(), out int choice) || !Enum.IsDefined(typeof(BookJanre), choice))
+        {
+            Console.WriteLine("Некорректный выбор.\n");
+            return;
+        }
+
+        BookJanre selectedGenre = (BookJanre)choice;
+
+        var filteredBooks = books.Where(b => b.Janre == selectedGenre).ToList();
+
+        if (filteredBooks.Count == 0)
+        {
+            Console.WriteLine($"Книг жанра {selectedGenre} не найдено.\n");
+            return;
+        }
+
+        Console.WriteLine($"\nКниги жанра {selectedGenre}:\n");
+        foreach (var book in filteredBooks)
+            Console.WriteLine(book.Print());
     }
 
     static void SortByName()
     {
-
+                
     }
 
     static void SortByYear()
