@@ -8,6 +8,7 @@
 
         while (true)
         {
+            Console.WriteLine("0. Вывод всех книг");
             Console.WriteLine("1. Добавление книги");
             Console.WriteLine("2. Удаление книги по ID");
             Console.WriteLine("3. Поиск книги по названию");
@@ -22,10 +23,10 @@
             Console.Write("Ваш выбор: ");
             string choice = Console.ReadLine();
 
-            switch (choice) 
+            switch (choice)
             {
                 case "0":
-                    OutputAllBooks();
+                    OuptputAllBooks();
                     break;
                 case "1":
                     AddBook();
@@ -67,8 +68,7 @@
         }
     }
     static List<Book> books = new List<Book>();
-
-    static void OutputAllBooks()
+    static void OuptputAllBooks()
     {
         if (books.Count == 0)
         {
@@ -83,17 +83,16 @@
         }
         Console.WriteLine();
     }
-
     static void AddTestData()
     {
-        Book book1 = new Book("Мастер и Маргарита", 1500m, 1966, "Михаил Булгаков", BookJanre.Fantasy);
-        Book book2 = new Book("Преступление и наказание", 1200m, 1866, "Федор Достоевский", BookJanre.Drama);
-        Book book3 = new Book("Война и мир", 2000m, 1867, "Лев Толстой", BookJanre.Drama);
-        Book book4 = new Book("Евгений Онегин", 800m, 1833, "Александр Пушкин", BookJanre.Romantic);
-        Book book5 = new Book("Гарри Поттер и философский камень", 1800m, 1997, "Джоан Роулинг", BookJanre.Fantasy);
-        Book book6 = new Book("Анна Каренина", 1300m, 1877, "Лев Толстой", BookJanre.Drama);
-        Book book7 = new Book("Ромео и Джульетта", 750m, 1597, "Уильям Шекспир", BookJanre.Romantic);
-        Book book8 = new Book("Властелин колец", 2200m, 1954, "Джон Толкин", BookJanre.Fantasy);
+        books.Add(new Book("Мастер и Маргарита", 1500m, 1966, "Михаил Булгаков", BookJanre.Fantasy));
+        books.Add(new Book("Преступление и наказание", 1200m, 1866, "Федор Достоевский", BookJanre.Drama));
+        books.Add(new Book("Война и мир", 2000m, 1867, "Лев Толстой", BookJanre.Drama));
+        books.Add(new Book("Евгений Онегин", 800m, 1833, "Александр Пушкин", BookJanre.Romantic));
+        books.Add(new Book("Гарри Поттер и философский камень", 1800m, 1997, "Джоан Роулинг", BookJanre.Fantasy));
+        books.Add(new Book("Анна Каренина", 1300m, 1877, "Лев Толстой", BookJanre.Drama));
+        books.Add(new Book("Ромео и Джульетта", 750m, 1597, "Уильям Шекспир", BookJanre.Romantic));
+        books.Add(new Book("Властелин колец", 2200m, 1954, "Джон Толкин", BookJanre.Fantasy));
 
         Console.WriteLine("Тестовые данные добавлены успешно!");
         Console.WriteLine($"Добавлено 8 тестовых книг");
@@ -139,6 +138,9 @@
 
         Book newBook = new Book(name, price, year, author, selectedGenre);
         books.Add(newBook);
+
+
+
     }
 
     static void RemoveBook()
@@ -156,7 +158,7 @@
         }
     }
 
-    static void SearchNameBook() 
+    static void SearchNameBook()
     {
         Console.Write("Введите название книги: ");
         string name = Console.ReadLine().ToLower();
@@ -171,6 +173,7 @@
             results.ForEach(b => Console.WriteLine(b.Print()));
         }
     }
+
 
     static void SearchAutorBook()
     {
@@ -221,6 +224,7 @@
         Console.WriteLine($"\nКниги жанра {selectedGenre}:\n");
         foreach (var book in filteredBooks)
             Console.WriteLine(book.Print());
+
     }
 
     static void SortByName()
@@ -260,7 +264,7 @@
     }
 }
 
-enum BookJanre
+public enum BookJanre
 {
     Romantic,
     Fantasy,
@@ -271,7 +275,7 @@ public class Book
     private static int nextID = 1;
     public int ID { get; }
     public string Name { get; private set; }
-    public string Autor {  get; private set; }
+    public string Autor { get; private set; }
     public BookJanre Janre { get; private set; }
     public int Year { get; private set; }
     public decimal Price { get; private set; }
@@ -297,4 +301,3 @@ public class Book
     }
 
 }
-
