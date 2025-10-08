@@ -225,12 +225,14 @@
 
     static void SortByName()
     {
-                
+        var sorted = books.OrderBy(b => b.Name).ToList();
+        sorted.ForEach(b => Console.WriteLine(b.Print()));
     }
 
     static void SortByYear()
     {
-
+        var sorted = books.OrderBy(b => b.Year).ToList();
+        sorted.ForEach(b => Console.WriteLine(b.Print()));
     }
 
     static void OutputMinPrice()
