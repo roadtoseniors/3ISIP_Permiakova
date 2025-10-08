@@ -24,6 +24,9 @@
 
             switch (choice) 
             {
+                case "0":
+                    OutputAllBooks();
+                    break;
                 case "1":
                     AddBook();
                     break;
@@ -63,6 +66,23 @@
             }
         }
     }
+    static List<Book> books = new List<Book>();
+
+    static void OutputAllBooks()
+    {
+        if (books.Count == 0)
+        {
+            Console.WriteLine("Библиотека пуста.");
+            return;
+        }
+
+        Console.WriteLine("\nСписок всех книг в библиотеке:\n");
+        foreach (var book in books)
+        {
+            Console.WriteLine(book.Print());
+        }
+        Console.WriteLine();
+    }
 
     static void AddTestData()
     {
@@ -81,17 +101,64 @@
 
     static void AddBook()
     {
+        Console.Write("Введите название книги: ");
+        string name = Console.ReadLine();
 
+        Console.Write("Введите автора: ");
+        string author = Console.ReadLine();
+
+        Console.Write("Введите год издания: ");
+        int year;
+        while (!int.TryParse(Console.ReadLine(), out year) || year <= 0)
+        {
+            Console.Write("Некорректный ввод. Введите год издания снова: ");
+        }
+
+        Console.Write("Введите цену: ");
+        decimal price;
+        while (!decimal.TryParse(Console.ReadLine(), out price) || price <= 0)
+        {
+            Console.Write("Некорректный ввод. Введите положительную цену: ");
+        }
+
+        Console.WriteLine("\nВыберите жанр:");
+        int index = 1;
+        foreach (BookJanre genre in Enum.GetValues(typeof(BookJanre)))
+        {
+            Console.WriteLine($"{index}. {genre}");
+            index++;
+        }
+
+        int genreChoice;
+        while (!int.TryParse(Console.ReadLine(), out genreChoice) || genreChoice < 1 || genreChoice > Enum.GetValues(typeof(BookJanre)).Length)
+        {
+            Console.Write("Некорректный выбор. Введите номер жанра: ");
+        }
+
+        BookJanre selectedGenre = (BookJanre)Enum.GetValues(typeof(BookJanre)).GetValue(genreChoice - 1);
+
+        Book newBook = new Book(name, price, year, author, selectedGenre);
+        books.Add(newBook);
     }
 
     static void RemoveBook()
     {
-
+        Console.Write("Введите ID для удаления:");
+        int id;
+        if (int.TryParse(Console.ReadLine(), out id))
+        {
+            var book = books.FirstOrDefault(b => b.ID == id);
+            if (book != null)
+            {
+                books.Remove(book);
+                Console.WriteLine("Успешно!");
+            }
+        }
     }
 
     static void SearchNameBook() 
-    { 
-
+    {
+        
     }
 
     static void SearchAutorBook()
