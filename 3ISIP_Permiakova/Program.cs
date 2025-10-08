@@ -237,17 +237,26 @@
 
     static void OutputMinPrice()
     {
-
+        var min = books.OrderBy(b => b.Price).ToList().FirstOrDefault();
+        Console.WriteLine(min.Print());
     }
 
     static void OutputMaxPrice()
     {
-
+        var max = books.OrderBy(b => b.Price).ToList().LastOrDefault();
+        Console.WriteLine(max.Print());
     }
 
     static void OutputCountBookAutor()
     {
-
+        var groups = books.GroupBy(b => b.Autor)
+                           .Select(g => new { Autor = g.Key, Count = g.Count() });
+        Console.WriteLine("Количество книг по авторам:");
+        foreach (var g in groups)
+        {
+            Console.WriteLine($"{g.Autor}: {g.Count}");
+        }
+        Console.WriteLine();
     }
 }
 
