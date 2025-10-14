@@ -1,4 +1,5 @@
-﻿class Person
+﻿
+class Person
 {
     private string FullName;
     private int Age;
@@ -19,13 +20,11 @@
 
 class Student : Person
 {
-    private List<Cours> Courses;
     private int NumberOfStudent;
 
-    public Student (string fullName, int age, bool gender, List<Cours> courses, int numberOfstudent)
+    public Student (string fullName, int age, bool gender, int numberOfstudent)
         : base(fullName, age, gender)
     {
-        Courses = courses;
         NumberOfStudent = numberOfstudent;
     }
     
@@ -33,7 +32,7 @@ class Student : Person
     {
         Console.WriteLine("Студент");
         base.Print();
-        Console.WriteLine($"Список курсов {Courses}, номер студака {NumberOfStudent}");
+        Console.WriteLine($"Номер студака {NumberOfStudent}");
     }
 }
 
@@ -61,6 +60,9 @@ class Cours
     public int ID { get; }
     public string NameProf { get; private set; }
     public string NameCourse { get; private set; }
+    public List<Student> Student {  get; private set; }
+    public List<Professor> Professor { get; private set; }
+
 
     public Cours(int nextID, int iD, string nameProf, string nameCourse)
     {
@@ -73,4 +75,72 @@ class Cours
     {
         Console.WriteLine($"Индификатор {ID}, Имя преподавателя {NameProf}, Название курса {NameCourse}");
     }
+}
+
+public class University
+{   
+        //var testing = new List<Person>
+        //{
+        //    new Person("Горланыч Вова", 22, true),
+        //    new Student("Валим Гусенков", 18, true, 123456),
+        //};
+
+        Console.WriteLine("Менюшка");
+        while (true)
+        {
+            Console.WriteLine("1. добавление студента");
+            Console.WriteLine("2. добавление преподавателя");
+            Console.WriteLine("3. добавление курса");
+            Console.WriteLine("4. записать студента на курс");
+            Console.WriteLine("5. запись преподавателя на курс");
+
+            string choise = Console.ReadLine();
+
+            switch(choise )
+            {
+                case "1":
+                    AddStudent();
+                    break;
+                case "2":
+                    AddProfessor();
+                    break;
+                case "3":
+                    AddCourses();
+                    break;
+                case"4":
+                    WriteStudent();
+                    break;
+                case"5":
+                    WriteProfessor();
+                    break;
+                default:
+                    Console.WriteLine("гавно");
+                    break;
+            }
+
+            static void AddStudent()
+            {
+
+            }
+
+            static void AddProfessor()
+            {
+
+            }
+
+            static void AddCourses()
+            {
+
+            }
+
+            static void WriteStudent()
+            {
+
+            }
+
+            static void WriteProfessor()
+            {
+
+            }
+        }
 }
