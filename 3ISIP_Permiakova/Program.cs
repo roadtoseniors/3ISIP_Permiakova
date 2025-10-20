@@ -259,12 +259,12 @@ class Game
             player.Heal();
         else if (roll == 1)
         {
-            int atk = rnd.Next(5, 16); // случайная атака для оружия
+            int atk = rnd.Next(5, 16);
             player.EquipWeapon($"Меч +{atk}", atk);
         }
         else
         {
-            int def = rnd.Next(1, 11); // случайная защита для брони
+            int def = rnd.Next(1, 11);
             player.EquipArmor($"Броня +{def}", def);
         }
     }
@@ -282,7 +282,7 @@ class Game
                 if (choice == 1)
                 {
                     int dmg = player.Attack - enemy.Defense;
-                    if (dmg < 1) dmg = 1; // Минимальный урон 1
+                    if (dmg < 1) dmg = 1;
                     enemy.CurrentHP -= dmg;
                     Console.WriteLine($"Вы нанесли {dmg} урона {enemy.Name}! HP врага: {enemy.CurrentHP}/{enemy.MaxHP}");
                 }
