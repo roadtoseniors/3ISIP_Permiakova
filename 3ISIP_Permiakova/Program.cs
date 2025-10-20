@@ -127,7 +127,7 @@ class Enemy
             Console.WriteLine($"{Name} нанес критический удар!");
         }
 
-        if (dmg < 1) dmg = 1; // Минимальный урон 1
+        if (dmg < 1) dmg = 1;
         player.TakeDamage(dmg);
 
         if (CanFreeze && rnd.Next(100) < FreezeChance)
@@ -169,5 +169,55 @@ class Mag : Enemy
         Name = "Маг";
         CanFreeze = true;
         FreezeChance = 20;
+    }
+}
+
+class GoblinBoss : Goblin
+{
+    public GoblinBoss()
+    {
+        Name = "ВВГ Гоблин-Босс";
+        MaxHP = 30 * 2;
+        CurrentHP = MaxHP;
+        Attack = (int)(5 * 1.5);
+        Defense = (int)(2 * 1.2);
+        CritChance += 10;
+    }
+}
+
+class SkeletBossKova : Skelet
+{
+    public SkeletBossKova()
+    {
+        Name = "Скелет-Ковальский";
+        MaxHP = (int)(40 * 2.5);
+        CurrentHP = MaxHP;
+        Attack = (int)(6 * 1.3);
+        Defense = (int)(3 * 1.4);
+    }
+}
+
+class SkeletBossPest : Skelet
+{
+    public SkeletBossPest()
+    {
+        Name = "Скелет-Пестов";
+        MaxHP = (int)(40 * 1.3);
+        CurrentHP = MaxHP;
+        Attack = (int)(6 * 1.8);
+        Defense = (int)(3 * 0.6);
+    }
+}
+
+class MagBoss : Mag
+{
+    public MagBoss()
+    {
+        Name = "Архимаг C++";
+        MaxHP = (int)(25 * 1.8);
+        CurrentHP = MaxHP;
+        Attack = (int)(4 * 1.6);
+        Defense = (int)(2 * 1.1);
+        FreezeChance += 10;
     }
 }
