@@ -12,7 +12,12 @@ namespace _3ISIP_Permiakova_DOTNETFramework
         static int id;
         static int balance;
         static int markup;
+        static decimal num;
+        static int count = 0;
+        static bool playerBuying = false;
+        static bool clientServiced = false;
 
+        static Dictionary<string, int> partsToBuy = new Dictionary<string, int>();
         static void Main(string[] args)
         {
             markup = 1000; 
@@ -27,28 +32,49 @@ namespace _3ISIP_Permiakova_DOTNETFramework
                 Console.WriteLine($"{part2.Name}; {part2.Price}; {part2.Count}");
             }
             Console.WriteLine("-------------------------------------------------");
-            while (true)
-            {
-                Console.WriteLine("К вам пришел новый клиент, у него сломалась деталь");
-                int inkrement = 0;
-                while (true)
+            
+            
+           Console.WriteLine("К вам пришел новый клиент, у него сломалась деталь");
+           int inkrement = 1;
+           while (true)
+           {
+                
+                if (playerBuying)
                 {
-                    Random randomID = new Random();
-                    id = randomID.Next(1, part.Count);
-                    Console.WriteLine($"Клиент {inkrement++}");
-                    Console.WriteLine($"Поломка: {part[id].Name}");
-                    Console.WriteLine($"Стоимость ремонта {part[id].Price + markup}");
+                    if (count == 2)
+                    {
+                        count = 0;
+                        playerBuying = false;
+                        foreach(var partToBuy in partsToBuy)
+                        {
+                            CoreFile.Context.Part.First(p => p.Name == partToBuy.Key).Count += partToBuy.Value;
+                        }
+                        partsToBuy.Clear();
+                    }
+                    else
+                    {
+                        count++;
+                    }
+                }
 
-                    Console.WriteLine("-------------------------------------------------");
-
-                    Console.WriteLine("Выберите действие: ");
-                    Console.WriteLine("1. Вывести весь список");
-                    Console.WriteLine("2. Согласится на ремонт");
-                    Console.WriteLine("3. Не соглашатся на ремонт");
-                    Console.WriteLine("4. Докупить детали");
-
-                    Console.WriteLine("-------------------------------------------------");
-
+                clientServiced = false;
+                Random randomID = new Random();
+                id = randomID.Next(1, part.Count);
+                Console.WriteLine($"Клиент {inkrement++}");
+                Console.WriteLine($"Поломка: {part[id].Name}");
+                Console.WriteLine($"Стоимость ремонта {part[id].Price + markup}");
+                
+                Console.WriteLine("-------------------------------------------------");
+                
+                Console.WriteLine("Выберите действие: ");
+                Console.WriteLine("1. Вывести весь список");
+                Console.WriteLine("2. Согласится на ремонт");
+                Console.WriteLine("3. Не соглашатся на ремонт");
+                Console.WriteLine("4. Докупить детали говна");
+                
+                Console.WriteLine("-------------------------------------------------");
+                while(!clientServiced)
+                {
                     int choise = Convert.ToInt32(Console.ReadLine());
                     switch (choise)
                     {
@@ -57,9 +83,11 @@ namespace _3ISIP_Permiakova_DOTNETFramework
                             break;
                         case 2:
                             Agree();
+                            clientServiced = true;
                             break;
                         case 3:
                             Disagree();
+                            clientServiced = true;
                             break;
                         case 4:
                             BuyParts();
@@ -69,7 +97,7 @@ namespace _3ISIP_Permiakova_DOTNETFramework
                             break;
                     }
                 }
-            }
+           }
         }
 
         static void OutputDB()
@@ -97,9 +125,10 @@ namespace _3ISIP_Permiakova_DOTNETFramework
             }
             else
             {
-                CoreFile.Context.Part.Find(part[id]).Count--;
+                CoreFile.Context.Part.Find(part[id].Count--);
                 CoreFile.Context.SaveChanges();
-                Console.WriteLine($"ремонт прошел успешно, ваш баланс составляет {balance + part[id].Price + markup}");
+                num = balance+part[id].Price + markup;
+                Console.WriteLine($"ремонт прошел успешно, ваш баланс составляет {num}");
                 Console.WriteLine("-------------------------------------------------");
             }
         }
@@ -107,14 +136,34 @@ namespace _3ISIP_Permiakova_DOTNETFramework
         static void Disagree()
         {
             Console.WriteLine("Вы не согласились на ремонт");
-            Console.WriteLine("С вашего баланса будет списан штраф");
+            Console.WriteLine($"С вашего баланса будет списан штраф {part[id].Price}");
             Console.WriteLine($"Теперь ваш баланс составляет {balance - part[id].Price}");
             Console.WriteLine("-------------------------------------------------");
         }
 
         static void BuyParts()
         {
-            Console.WriteLine("Доступные детали для покупки");
+            while (true) 
+            {
+                foreach (Part part in part)
+                {
+                    Console.WriteLine(part.Name);
+                }
+                Console.WriteLine("Введите детали для покупки");
+                string namePart = Console.ReadLine();
+                Console.WriteLine("Количество");
+                if (int.TryParse(Console.ReadLine(), out int partsCount))
+                {
+                    partsToBuy.Add(namePart, partsCount);
+                }
+                balance -= (int)(CoreFile.Context.Part.First(p => p.Name == namePart).Price * partsCount);
+                playerBuying = true;
+                Console.WriteLine("Хотите ещё купить?");
+                if(Console.ReadLine() == "нет")
+                {
+                    break;
+                }
+            }
 
         }
     }
