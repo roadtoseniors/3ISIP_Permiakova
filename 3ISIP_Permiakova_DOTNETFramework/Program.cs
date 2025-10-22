@@ -20,9 +20,9 @@ namespace _3ISIP_Permiakova_DOTNETFramework
         static Dictionary<string, int> partsToBuy = new Dictionary<string, int>();
         static void Main(string[] args)
         {
-            markup = 1000; 
-            Random rand = new Random(); 
-            balance = Convert.ToInt32(rand.Next(2000,40000));
+            markup = 1000;
+            Random rand = new Random();
+            balance = Convert.ToInt32(rand.Next(2000, 40000));
             Console.WriteLine($"Игра запустилась, ваш баланс {balance}");
             Console.WriteLine("Ваш склад: ");
             part = CoreFile.Context.Part.ToList();
@@ -32,20 +32,20 @@ namespace _3ISIP_Permiakova_DOTNETFramework
                 Console.WriteLine($"{part2.Name}; {part2.Price}; {part2.Count}");
             }
             Console.WriteLine("-------------------------------------------------");
-            
-            
-           Console.WriteLine("К вам пришел новый клиент, у него сломалась деталь");
-           int inkrement = 1;
-           while (true)
-           {
-                
+
+
+            Console.WriteLine("К вам пришел новый клиент, у него сломалась деталь");
+            int inkrement = 1;
+            while (true)
+            {
+
                 if (playerBuying)
                 {
                     if (count == 2)
                     {
                         count = 0;
                         playerBuying = false;
-                        foreach(var partToBuy in partsToBuy)
+                        foreach (var partToBuy in partsToBuy)
                         {
                             CoreFile.Context.Part.First(p => p.Name == partToBuy.Key).Count += partToBuy.Value;
                         }
@@ -60,44 +60,47 @@ namespace _3ISIP_Permiakova_DOTNETFramework
                 clientServiced = false;
                 Random randomID = new Random();
                 id = randomID.Next(1, part.Count);
-                Console.WriteLine($"Клиент {inkrement++}");
-                Console.WriteLine($"Поломка: {part[id].Name}");
-                Console.WriteLine($"Стоимость ремонта {part[id].Price + markup}");
-                
-                Console.WriteLine("-------------------------------------------------");
-                
-                Console.WriteLine("Выберите действие: ");
-                Console.WriteLine("1. Вывести весь список");
-                Console.WriteLine("2. Согласится на ремонт");
-                Console.WriteLine("3. Не соглашатся на ремонт");
-                Console.WriteLine("4. Докупить детали говна");
-                
-                Console.WriteLine("-------------------------------------------------");
-                while(!clientServiced)
+
+                while (!clientServiced)
                 {
-                    int choise = Convert.ToInt32(Console.ReadLine());
-                    switch (choise)
+                    Console.WriteLine($"Клиент {inkrement++}");
+                    Console.WriteLine($"Поломка: {part[id].Name}");
+                    Console.WriteLine($"Стоимость ремонта {part[id].Price + markup}");
+
+                    Console.WriteLine("-------------------------------------------------");
+
+                    Console.WriteLine("Выберите действие: ");
+                    Console.WriteLine("1. Вывести весь список");
+                    Console.WriteLine("2. Согласится на ремонт");
+                    Console.WriteLine("3. Не соглашатся на ремонт");
+                    Console.WriteLine("4. Докупить детали говна");
+
+                    Console.WriteLine("-------------------------------------------------");
+                    while (!int.TryParse(Console.ReadLine(), out int choice))
                     {
-                        case 1:
-                            OutputDB();
-                            break;
-                        case 2:
-                            Agree();
-                            clientServiced = true;
-                            break;
-                        case 3:
-                            Disagree();
-                            clientServiced = true;
-                            break;
-                        case 4:
-                            BuyParts();
-                            break;
-                        default:
-                            Console.WriteLine("Вы ввели несуществующее действие");
-                            break;
+                        switch (choice)
+                        {
+                            case 1:
+                                OutputDB();
+                                break;
+                            case 2:
+                                Agree();
+                                clientServiced = true;
+                                break;
+                            case 3:
+                                Disagree();
+                                clientServiced = true;
+                                break;
+                            case 4:
+                                BuyParts();
+                                break;
+                            default:
+                                Console.WriteLine("Вы ввели несуществующее действие");
+                                break;
+                        }
                     }
                 }
-           }
+            }
         }
 
         static void OutputDB()
