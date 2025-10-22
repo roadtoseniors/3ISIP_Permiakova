@@ -6,20 +6,21 @@ using System.Threading.Tasks;
 
 namespace _3ISIP_Permiakova_DOTNETFramework
 {
-    class Client
-    {
-
-    }
     class Program
     {
+        static List<Part> part;
+        static int id;
+        static int balance;
+        static int markup;
+
         static void Main(string[] args)
         {
-            int markup = 1000; 
+            markup = 1000; 
             Random rand = new Random(); 
-            int balance = Convert.ToInt32(rand.Next(2000,40000));
+            balance = Convert.ToInt32(rand.Next(2000,40000));
             Console.WriteLine($"Игра запустилась, ваш баланс {balance}");
             Console.WriteLine("Ваш склад: ");
-            List<Part> part = CoreFile.Context.Part.ToList();
+            part = CoreFile.Context.Part.ToList();
 
             foreach (Part part2 in part)
             {
@@ -33,7 +34,7 @@ namespace _3ISIP_Permiakova_DOTNETFramework
                 while (true)
                 {
                     Random randomID = new Random();
-                    int id = randomID.Next(1, part.Count);
+                    id = randomID.Next(1, part.Count);
                     Console.WriteLine($"Клиент {inkrement++}");
                     Console.WriteLine($"Поломка: {part[id].Name}");
                     Console.WriteLine($"Стоимость ремонта {part[id].Price + markup}");
@@ -68,13 +69,12 @@ namespace _3ISIP_Permiakova_DOTNETFramework
                             break;
                     }
                 }
-                
             }
         }
 
         static void OutputDB()
         {
-            List<Part> part = CoreFile.Context.Part.ToList();
+            part = CoreFile.Context.Part.ToList();
 
             Console.WriteLine("Ваш склад");
 
@@ -89,15 +89,32 @@ namespace _3ISIP_Permiakova_DOTNETFramework
         static void Agree()
         {
             Console.WriteLine("Вы согласились на ремонт");
+            if (part[id].Count == 0)
+            {
+                Console.WriteLine("Ты мудак!");
+                Console.WriteLine($"С вашего баланса списан штраф, теперь баланс составляет {balance - part[id].Price}");
+                Console.WriteLine("-------------------------------------------------");
+            }
+            else
+            {
+                CoreFile.Context.Part.Find(part[id]).Count--;
+                CoreFile.Context.SaveChanges();
+                Console.WriteLine($"ремонт прошел успешно, ваш баланс составляет {balance + part[id].Price + markup}");
+                Console.WriteLine("-------------------------------------------------");
+            }
         }
 
         static void Disagree()
         {
-
+            Console.WriteLine("Вы не согласились на ремонт");
+            Console.WriteLine("С вашего баланса будет списан штраф");
+            Console.WriteLine($"Теперь ваш баланс составляет {balance - part[id].Price}");
+            Console.WriteLine("-------------------------------------------------");
         }
 
         static void BuyParts()
         {
+            Console.WriteLine("Доступные детали для покупки");
 
         }
     }
