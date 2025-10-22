@@ -8,6 +8,6 @@ namespace _3ISIP_Permiakova_DOTNETFramework
 {
     class CoreFile
     {
-
+        public static AvtoServiseEntities Context = new AvtoServiseEntities();
     }
 }
