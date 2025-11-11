@@ -203,7 +203,57 @@ namespace _3ISIP_PermiakovaPR8
 
         static void AddProductToBasket(User user)
         {
+            Console.WriteLine("----- ДОБАВЛЕНИЕ ТОВАРА В КОРЗИНУ -----");
 
+            OutputAllProduct();
+
+            Console.Write("Введите ID товара для добавления в корзину: ");
+            int productId = Convert.ToInt32(Console.ReadLine());
+
+            Console.Write("Введите количество: ");
+            int quantity = Convert.ToInt32(Console.ReadLine());
+
+            Product product = Core.Context.Product.FirstOrDefault(p => p.ID == productId);
+            if (product == null)
+            {
+                Console.WriteLine("Товар с таким ID не найден!");
+                return;
+            }
+
+            if (quantity > product.Count)
+            {
+                Console.WriteLine($"Недостаточно товара на складе! Доступно: {product.Count}");
+                return;
+            }
+
+            if (quantity <= 0)
+            {
+                Console.WriteLine("Количество должно быть больше 0!");
+                return;
+            }
+
+            Basket1 existingBasketItem = Core.Context.Basket
+                .FirstOrDefault(b => b.User_ID == user.ID && b.Product_ID == productId);
+
+            if (existingBasketItem != null)
+            {
+                existingBasketItem.Count += quantity;
+                Console.WriteLine($"Количество товара '{product.NameProduct}' в корзине увеличено!");
+            }
+            else
+            {
+                Basket1 newBasketItem = new Basket1
+                {
+                    User_ID = user.ID,
+                    Product_ID = productId,
+                    Count = quantity
+                };
+                Core.Context.Basket.Add(newBasketItem);
+                Console.WriteLine($"Товар '{product.NameProduct}' добавлен в корзину!");
+            }
+
+            Core.Context.SaveChanges();
+            Console.WriteLine("----------------------------------------");
         }
 
         static void ShowBasket(User user)
@@ -250,23 +300,39 @@ namespace _3ISIP_PermiakovaPR8
             {
                 Console.WriteLine("1. Купить один товар");
                 Console.WriteLine("2. Купить всю корзину");
-
+                Console.WriteLine("3. Вернуться назад");
                 int chice = Convert.ToInt32( Console.ReadLine());
 
                 switch(chice)
                 {
                     case 1:
+                        BuySingleProduct(user);
                         break;
                     case 2:
+                        BuyWholeBasket(user);
                         break;
+                    case 3:
+                        return;
                     default:
-                        Console.WriteLine("Нельзя");
+                        Console.WriteLine("Неверный пункт меню!");
                         break;
                 }
             }
         }
 
         static void HistoryZakazov(User user)
+        {
+            Console.WriteLine("----история заказов----");
+
+
+        }
+
+        static void BuySingleProduct(User user)
+        {
+
+        }
+
+        static void BuyWholeBasket(User user)
         {
 
         }
