@@ -139,7 +139,7 @@ namespace _3ISIP_PermiakovaPR8
                 return;
             }
 
-            Console.WriteLine(
+            Console.WriteLine($"Авторизация прошла успешно. Привет {user.Name} {user.Lastname}");
 
         }
 
