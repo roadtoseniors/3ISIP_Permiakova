@@ -138,7 +138,6 @@ namespace _3ISIP_PermiakovaPR8
                 Console.WriteLine("Пароль неправильный");
                 return;
             }
-
             Console.WriteLine($"Авторизация прошла успешно. Привет {user.Name} {user.Lastname}");
         }
 
