@@ -138,7 +138,10 @@ namespace _3ISIP_PermiakovaPR8
                 Console.WriteLine("Пароль неправильный");
                 return;
             }
+
             Console.WriteLine($"Авторизация прошла успешно. Привет {user.Name} {user.Lastname}");
+
+            UserMenu(user);
         }
 
         static void OutputAllPVZ()
@@ -153,6 +156,67 @@ namespace _3ISIP_PermiakovaPR8
             }
 
             Console.WriteLine("----------------------------------------");
+        }
+
+        static void UserMenu(User user)
+        {
+            Console.WriteLine("---Личный кабинет----");
+            while (true) 
+            {
+                Console.WriteLine("1. Просмотр товаров");
+                Console.WriteLine("2. Добавить товар в корзину");
+                Console.WriteLine("3. Просмотр корзины");
+                Console.WriteLine("4. Оформить заказ");
+                Console.WriteLine("5. История заказов");
+                Console.WriteLine("6. Выйти из аккаунта");
+
+                int choice = Convert.ToInt32(Console.ReadLine());
+
+                switch(choice)
+                {
+                    case 1:
+                        OutputAllProduct();
+                        break;
+                    case 2:
+                        AddProductToBasket();
+                        break;
+                    case 3:
+                        ShowBasket();
+                        break;
+                    case 4:
+                        OformitZakaz();
+                        break;
+                    case 5:
+                        HistoryZakazov();
+                        break;
+                    case 6:
+                        Console.WriteLine("выход из аккаунта пакаааааа");
+                        return;
+                    default:
+                        Console.WriteLine("Неверный пункт меню! Попробуйте снова.");
+                        break;
+                }
+            }
+        }
+
+        static void AddProductToBasket()
+        {
+
+        }
+
+        static void ShowBasket()
+        {
+
+        }
+
+        static void OformitZakaz()
+        {
+
+        }
+
+        static void HistoryZakazov()
+        {
+
         }
     }
 }
