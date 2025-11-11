@@ -12,21 +12,14 @@ namespace _3ISIP_PermiakovaPR8
     using System;
     using System.Collections.Generic;
     
-    public partial class Product
+    public partial class Basket1
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Product()
-        {
-            this.Basket1 = new HashSet<Basket1>();
-        }
-    
         public int ID { get; set; }
-        public string NameProduct { get; set; }
-        public string Description { get; set; }
-        public decimal Price { get; set; }
+        public int User_ID { get; set; }
+        public int Product_ID { get; set; }
         public int Count { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Basket1> Basket1 { get; set; }
+        public virtual Product Product { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace _3ISIP_PermiakovaPR8
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             while (true)
@@ -178,16 +180,16 @@ namespace _3ISIP_PermiakovaPR8
                         OutputAllProduct();
                         break;
                     case 2:
-                        AddProductToBasket();
+                        AddProductToBasket(user);
                         break;
                     case 3:
-                        ShowBasket();
+                        ShowBasket(user);
                         break;
                     case 4:
-                        OformitZakaz();
+                        OformitZakaz(user);
                         break;
                     case 5:
-                        HistoryZakazov();
+                        HistoryZakazov(user);
                         break;
                     case 6:
                         Console.WriteLine("выход из аккаунта пакаааааа");
@@ -199,22 +201,72 @@ namespace _3ISIP_PermiakovaPR8
             }
         }
 
-        static void AddProductToBasket()
+        static void AddProductToBasket(User user)
         {
 
         }
 
-        static void ShowBasket()
+        static void ShowBasket(User user)
         {
+            List<Basket1> baskets = Core.Context.Basket
+                .Include(b => b.Product)
+                .Where(b => b.User_ID == user.ID)
+                .ToList();
 
+            Console.WriteLine("----- ВАША КОРЗИНА -----");
+
+            if (!baskets.Any())
+            {
+                Console.WriteLine("Корзина пуста");
+                Console.WriteLine("----------------------------------------");
+                return;
+            }
+
+            decimal totalPrice = 0;
+            int itemNumber = 1;
+
+            foreach (Basket1 basket in baskets)
+            {
+                Console.WriteLine($"{itemNumber}. {basket.Product.NameProduct}");
+                Console.WriteLine($"   Описание: {basket.Product.Description}");
+                Console.WriteLine($"   Цена: {basket.Product.Price} руб.");
+                Console.WriteLine($"   Количество: {basket.Count}");
+                Console.WriteLine($"   Сумма: {basket.Product.Price * basket.Count} руб.");
+                Console.WriteLine();
+
+                totalPrice += basket.Product.Price * basket.Count;
+                itemNumber++;
+            }
+
+            Console.WriteLine($"ОБЩАЯ СУММА: {totalPrice} руб.");
+            Console.WriteLine("----------------------------------------");
         }
 
-        static void OformitZakaz()
+        static void OformitZakaz(User user)
         {
+            Console.WriteLine("оформление заказа");
+            ShowBasket(user);
+            while (true)
+            {
+                Console.WriteLine("1. Купить один товар");
+                Console.WriteLine("2. Купить всю корзину");
 
+                int chice = Convert.ToInt32( Console.ReadLine());
+
+                switch(chice)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        Console.WriteLine("Нельзя");
+                        break;
+                }
+            }
         }
 
-        static void HistoryZakazov()
+        static void HistoryZakazov(User user)
         {
 
         }
