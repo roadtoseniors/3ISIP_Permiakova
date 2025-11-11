@@ -140,7 +140,6 @@ namespace _3ISIP_PermiakovaPR8
             }
 
             Console.WriteLine($"Авторизация прошла успешно. Привет {user.Name} {user.Lastname}");
-
         }
 
         static void OutputAllPVZ()
