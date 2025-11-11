@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{454D63C8-CE12-4F5F-8404-AFB2B4ECCFD6}</ProjectGuid>
+    <ProjectGuid>{93BBD1E1-4135-4810-82EC-081F0EC6F94C}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>_3ISIP_PermyakovaPR8</RootNamespace>
-    <AssemblyName>3ISIP_PermyakovaPR8</AssemblyName>
+    <RootNamespace>_3ISIP_PermiakovaPR8</RootNamespace>
+    <AssemblyName>3ISIP_PermiakovaPR8</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,10 +34,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>..\..\..\..\OneDrive\Рабочий стол\EntityC#\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\..\OneDrive\Рабочий стол\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\..\..\..\OneDrive\Рабочий стол\EntityC#\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\..\OneDrive\Рабочий стол\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
