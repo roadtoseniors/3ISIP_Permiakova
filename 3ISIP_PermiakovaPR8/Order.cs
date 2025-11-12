@@ -12,19 +12,24 @@ namespace _3ISIP_PermiakovaPR8
     using System;
     using System.Collections.Generic;
     
-    public partial class PVZ
+    public partial class Order
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PVZ()
+        public Order()
         {
-            this.Order = new HashSet<Order>();
+            this.OrderProduct = new HashSet<OrderProduct>();
         }
     
         public int ID { get; set; }
-        public string NamePVZ { get; set; }
-        public string Adress { get; set; }
+        public int User_ID { get; set; }
+        public int PVZ_ID { get; set; }
+        public System.DateTime Date { get; set; }
+        public string Status { get; set; }
+        public decimal TotalPrice { get; set; }
     
+        public virtual PVZ PVZ { get; set; }
+        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Order { get; set; }
+        public virtual ICollection<OrderProduct> OrderProduct { get; set; }
     }
 }

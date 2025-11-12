@@ -13,10 +13,10 @@ namespace _3ISIP_PermiakovaPR8
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class GMWOGEntities2 : DbContext
+    public partial class GMWOGEntities4 : DbContext
     {
-        public GMWOGEntities2()
-            : base("name=GMWOGEntities2")
+        public GMWOGEntities4()
+            : base("name=GMWOGEntities4")
         {
         }
     
@@ -26,6 +26,8 @@ namespace _3ISIP_PermiakovaPR8
         }
     
         public virtual DbSet<Basket1> Basket1 { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
+        public virtual DbSet<OrderProduct> OrderProduct { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<PVZ> PVZ { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }

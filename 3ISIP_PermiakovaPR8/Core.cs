@@ -8,6 +8,6 @@ namespace _3ISIP_PermiakovaPR8
 {
     class Core
     {
-        public static GMWOGEntities Context = new GMWOGEntities();
+        public static GMWOGEntities4 Context = new GMWOGEntities4();
     }
 }

@@ -4,14 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5e40ef26e5104607b2cf2756eec15ae7" Name="Diagram1">
-        <EntityTypeShape EntityType="GMWOGModel.Basket1" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="GMWOGModel.Product" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="GMWOGModel.PVZ" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="GMWOGModel.sysdiagrams" Width="1.5" PointX="4.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="GMWOGModel.User" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
+      <Diagram DiagramId="66ac8793edf84fd3b2330c41cf6225a7" Name="Diagram1">
+        <EntityTypeShape EntityType="GMWOGModel.Basket1" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GMWOGModel.Order" Width="1.5" PointX="6" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GMWOGModel.OrderProduct" Width="1.5" PointX="8.25" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GMWOGModel.Product" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GMWOGModel.PVZ" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GMWOGModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GMWOGModel.User" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
         <AssociationConnector Association="GMWOGModel.FK_Basket1_Product" ManuallyRouted="false" />
         <AssociationConnector Association="GMWOGModel.FK_Basket1_User" ManuallyRouted="false" />
+        <AssociationConnector Association="GMWOGModel.FK_Order_PVZ" ManuallyRouted="false" />
+        <AssociationConnector Association="GMWOGModel.FK_Order_User" ManuallyRouted="false" />
+        <AssociationConnector Association="GMWOGModel.FK_OrderProduct_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="GMWOGModel.FK_OrderProduct_Product" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
