@@ -394,6 +394,7 @@ namespace _3ISIP_PermiakovaPR8
                 User_ID = user.ID,
                 PVZ_ID = pvzId,
                 Date = DateTime.Now,
+                Status = "Оформлен",
                 TotalPrice = selectedBasket.Product.Price * selectedBasket.Count
             };
 
@@ -446,6 +447,7 @@ namespace _3ISIP_PermiakovaPR8
             {
                 User_ID = user.ID,
                 PVZ_ID = pvzId,
+                Status = "Оформлен",
                 Date = DateTime.Now,
                 TotalPrice = totalPrice
             };
